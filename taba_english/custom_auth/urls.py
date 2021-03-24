@@ -5,4 +5,5 @@ app_name = 'custom_auth'
 # Be careful setting the name to just /login use userlogin instead!
 urlpatterns=[
     url(r'^register/$',views.Registration.as_view(),name='register'),
+    url(r'^login/$',views.Login.as_view(),name='login')
 ]
