@@ -16,9 +16,10 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from django.conf.urls import url,include
-
+from video.urls import router as video_router
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     url(r'^auth/',include('custom_auth.urls')),
+    path('', include(video_router.urls)),
 ]

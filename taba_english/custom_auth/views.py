@@ -7,7 +7,7 @@ from rest_framework import mixins
 from rest_framework import generics
 from rest_framework.authtoken.models import Token
 from django.contrib.auth.models import User
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 
 
 # Create your views here.
@@ -43,5 +43,22 @@ class Login(APIView):
 				resp = {'token': token.key, 'username': username}
 				return Response(resp, status=status.HTTP_200_OK)
 			else:
-				return Response({'desc':'wrong information'}, status=status.HTTP_401_UNAUTHORIZED)
+				return Response({'desc': 'wrong information'}, status=status.HTTP_401_UNAUTHORIZED)
 		return Response(user_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class Logout(APIView):
+	def post(self, request, format=None):
+		try:
+			logout(request)
+			return Response({'successfull': True, 'desc': 'logout successfully'}, status=status.HTTP_200_OK)
+		except Exception as e:
+			return Response({'successfull': False, 'desc': e.args[0]}, status=status.HTTP_400_BAD_REQUEST)
+
+
+class IsAuthenticated(APIView):
+	def get(self, request):
+		if request.user.is_authenticated:
+			return Response({'successfull': True, 'authenticated': True}, status=status.HTTP_200_OK)
+		else:
+			return Response({'successfull': True, 'authenticated': False}, status=status.HTTP_401_UNAUTHORIZED)
